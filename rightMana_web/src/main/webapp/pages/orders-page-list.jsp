@@ -326,6 +326,7 @@
                         </div>
                     </div>
 
+					<%-- 这里要尝试使用jQuery的分页插件，之后尝试修改--%>
                     <div class="box-tools pull-right">
                         <ul class="pagination">
                             <li>
