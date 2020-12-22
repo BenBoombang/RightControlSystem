@@ -11,5 +11,5 @@ import java.util.List;
 public interface OrdersService {
 
     // 查询所有订单
-    List<Orders> findAll();
+    List<Orders> findAll(int page,int size);
 }
