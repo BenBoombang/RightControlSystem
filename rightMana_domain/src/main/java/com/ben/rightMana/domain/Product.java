@@ -1,6 +1,6 @@
 package com.ben.rightMana.domain;
 
-import com.ben.rightMana.DateUtil;
+import com.ben.rightMana.utils.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import java.util.Date;
  * @time 16:15
  */
 public class Product implements Serializable {
-    private Integer id; // 主键
+    private String id; // 主键
     private String productNum; // 编号 唯一
     private String productName; // 名称
     private String cityName; // 出发城市
@@ -25,11 +25,11 @@ public class Product implements Serializable {
     private Integer productStatus; // 状态 0 关闭 1 开启
     private String productStatusStr;    // 这个属性用来存储在前台展示的 “ 商品状态 ” 的数据
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

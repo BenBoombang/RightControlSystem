@@ -16,4 +16,7 @@ public interface ProductDao {
     List<Product> findAll();
 
     void save(Product product);
+
+    // 根据id查对应的产品
+    Product findById(String id);
 }

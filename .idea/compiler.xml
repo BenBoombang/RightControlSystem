@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="rightMana_dao" />
+        <module name="rightMana_domain" />
+        <module name="rightMana_service" />
+        <module name="rightMana_utils" />
+        <module name="rightMana_web" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
