@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 
@@ -241,24 +242,7 @@
 								</thead>
 								<tbody id="ordersData">
 
-									<%-- 从pageInfo对象中取出list结果集 --%>
-									<%--<c:forEach items="${pageInfo.list}" var="orders">--%>
 
-										<%--<tr>--%>
-											<%--<td><input name="ids" type="checkbox"></td>--%>
-											<%--<td>${orders.id }</td>--%>
-											<%--<td>${orders.orderNum }</td>--%>
-											<%--<td>${orders.product.productName }</td>--%>
-											<%--<td>${orders.product.productPrice }</td>--%>
-											<%--<td>${orders.orderTimeStr }</td>--%>
-											<%--<td class="text-center">${orders.orderStatusStr }</td>--%>
-											<%--<td class="text-center">--%>
-												<%--<button type="button" class="btn bg-olive btn-xs">订单</button>--%>
-												<%--<button type="button" class="btn bg-olive btn-xs" onclick="location.href='${pageContext.request.contextPath}/orders/findById.do?id=${orders.id}'">详情</button>--%>
-												<%--<button type="button" class="btn bg-olive btn-xs">编辑</button>--%>
-											<%--</td>--%>
-										<%--</tr>--%>
-									<%--</c:forEach>--%>
 								</tbody>
 								<!--
                             <tfoot>
@@ -270,7 +254,13 @@
                             <th>CSS grade</th>
                             </tr>
                             </tfoot>-->
+
 							</table>
+
+							<%-- 定义一个标签域，用来存每页显示多少数据 --%>
+							<input type="hidden" id="hiddenPageSize">
+
+
 							<!--数据列表/-->
 
 							<!--工具栏-->
@@ -319,29 +309,16 @@
                             <select class="form-control" id="changePageSize" onchange="changePageSize()">
                                 <option>1</option>
                                 <option>2</option>
-                                <option>3</option>
+                                <option selected="selected">3</option>
                                 <option>4</option>
                                 <option>5</option>
                             </select> 条
                         </div>
                     </div>
 
-					<%-- 这里要尝试使用jQuery的分页插件，之后尝试修改--%>
                     <div class="box-tools pull-right">
                         <ul class="pagination">
-                            <li>
-                                <a href="${pageContext.request.contextPath}/orders/findAll?page=1&size=${pageInfo.pageSize}" aria-label="Previous">首页</a>
-                            </li>
-                            <li><a href="${pageContext.request.contextPath}/orders/findAll?page=${pageInfo.pageNum - 1}&size=${pageInfo.pageSize}">上一页</a></li>
 
-							<c:forEach begin="1" end="${pageInfo.pages}" var="pageNum">
-								<li><a href="${pageContext.request.contextPath}/orders/findAll?page=${pageNum}&size=${pageInfo.pageSize}">${pageNum}</a></li>
-							</c:forEach>
-
-                            <li><a href="${pageContext.request.contextPath}/orders/findAll?page=${pageInfo.pageNum + 1}&size=${pageInfo.pageSize}">下一页</a></li>
-                            <li>
-                                <a href="${pageContext.request.contextPath}/orders/findAll?page=${pageInfo.pages}&size=${pageInfo.pageSize}" aria-label="Next">尾页</a>
-                            </li>
                         </ul>
                     </div>
 
@@ -462,15 +439,20 @@
 		src="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/plugins/layer/layer.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/plugins/jqPage/jqPaginator.js"></script>
 	<script>
 
 		function changePageSize() {
 			//获取下拉框的值
 			var pageSize = $("#changePageSize").val();
 
-			//向服务器发送请求，改变没页显示条数
-			location.href = "${pageContext.request.contextPath}/orders/findAll?page=1&size="
-					+ pageSize;
+			// 将这个放到隐藏域中
+			$("#hiddenPageSize").val(pageSize);
+
+			// 然后立刻进行一次分页查询
+			pageQuery(1);
+
 		}
 		$(document).ready(function() {
 			// 选择框
@@ -481,7 +463,7 @@
 				locale : 'zh-CN'
 			});
 
-
+			pageQuery(1);
 		});
 
 		// 设置激活菜单
@@ -514,20 +496,31 @@
 				$(this).data("clicks", !clicks);
 			});
 
-			pageQuery(1,5);
 		});
+
+		// 创建用来查询订单相关的详细信息的方法
+		function queryOrderDetailById(id) {
+			window.location.href="${pageContext.request.contextPath}/orders/queryById?id=" + id;
+		}
+
 
 
 		// 创建分页函数
-		function pageQuery(pageno,pagesize) {
+		function pageQuery(pageno) {
 			var pageQueryLoding = null;
+
+			// 获取记录页面数据量的隐藏域的值
+			var mySize = $("#hiddenPageSize").val();
+			if (mySize == ""){
+				mySize = 3;
+			}
 
 			$.ajax({
 				type : "post",
 				url : "${pageContext.request.contextPath}/orders/findAll",
 				data : {
 					"page" : pageno,
-					"size" : pagesize
+					"size" : mySize
 				},
 				beforeSend : function () {
 					pageQueryLoding = layer.msg('数据加载中',{icon:16});
@@ -553,13 +546,32 @@
 							ordersDataContent += '<td class="text-center">' + orders.orderStatusStr + '</td>';
 							ordersDataContent += '<td class="text-center">';
 							ordersDataContent += '      <button type="button" class="btn bg-olive btn-xs">订单</button>';
-							ordersDataContent += '      <button type="button" class="btn bg-olive btn-xs" onclick="queryDetailById('+ orders.id +')" >详情</button>';
+							ordersDataContent += '      <button type="button" class="btn bg-olive btn-xs" onclick="queryOrderDetailById('+ orders.id +')" >详情</button>';
 							ordersDataContent += '      <button type="button" class="btn bg-olive btn-xs">编辑</button>';
 							ordersDataContent += '</td>' ;
 							ordersDataContent += '</tr>';
 						});
 
 						$("#ordersData").html(ordersDataContent);
+
+						$.jqPaginator(".pagination", {
+							// totalPages: 100, //设置分页的总页数
+							totalCounts: pageObj.total, //设置分页的总条目数
+							pageSize: pageObj.pageSize,
+							visiblePages: 5, //设置最多显示的页码数（例如有100也，当前第1页，则显示1 - 7页）
+							currentPage: pageObj.pageNum,//当前页
+							first: '<li class="first"><a href="javascript:;">首页</a></li>',
+							prev: '<li class="prev"><a href="javascript:;"><i class="arrow arrow2"></i>上一页</a></li>',
+							next: '<li class="next"><a href="javascript:;">下一页<i class="arrow arrow3"></i></a></li>',
+							last: '<li class="last"><a href="javascript:;">末页</a></li>',
+							page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+							onPageChange: function (num, type) {
+								//页面变化回调函数
+								if (type == "change") {
+									pageQuery(num);//当前页码
+								}
+							}
+						});
 
 					} else {
 						layer.msg("相关数据不存在", {time:2000, icon:5, shift:6},function () {

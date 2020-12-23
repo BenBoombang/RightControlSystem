@@ -9,8 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR Ben
@@ -23,38 +26,25 @@ public class OrdersController {
     @Autowired
     private OrdersService ordersService;
 
-    // 查询全部订单 —— 未分页
-//    @RequestMapping("/findAll")
-//    public ModelAndView findAll(){
-//
-//        ModelAndView mv = new ModelAndView();
-//
-//        List<Orders> ordersList = ordersService.findAll();
-//
-//        mv.addObject("ordersList",ordersList);
-//        mv.setViewName("orders-list");
-//
-//        return mv;
-//    }
-
     // 使用上分页插件
     @ResponseBody
     @RequestMapping("/findAll")
-    public Object findAll(@RequestParam(name = "page",required = false,defaultValue = "1")int page,@RequestParam(name = "size",required = false,defaultValue = "5")int size){
-//        ModelAndView mv = new ModelAndView();
-//        List<Orders> ordersList = ordersService.findAll(page,size);
-//        // PageInfo 就传统项目中的 page bean
-//        PageInfo pageInfo = new PageInfo(ordersList);
-//        mv.addObject("pageInfo",pageInfo);
-//        mv.setViewName("orders-page-list");
-//        return mv;
+    public Object findAll(@RequestParam(name = "page",required = false,defaultValue = "1")int page, @RequestParam(name = "size",required = false,defaultValue = "3")int size){
 
         AjaxResult ajaxResult = new AjaxResult();
 
         try {
-            List<Orders> ordersList = ordersService.findAll(page,size);
+            // 由于查询可能伴随着一些条件筛选，所以决定将参数封装到 map 中传递
+            Map<String,Object> map = new HashMap<>();
+            map.put("page",page);
+            map.put("size",size);
+
+            List<Orders> ordersList = ordersService.findAll(map);
+
             // PageInfo 就传统项目中的 page bean
             PageInfo pageInfo = new PageInfo(ordersList);
+            // pageInfo.setSize(count);
+
             ajaxResult.setData(pageInfo);
 
             ajaxResult.setSucc(true);
@@ -69,5 +59,17 @@ public class OrdersController {
     @RequestMapping("/main")
     public String main(){
         return "orders-page-list";
+    }
+
+
+    @RequestMapping("/queryById")
+    public ModelAndView queryById(@RequestParam(name = "id",required = true) String id){
+        ModelAndView mv = new ModelAndView();
+
+        Orders order = ordersService.queryById(id);
+        mv.addObject("orders",order);
+        mv.setViewName("orders-show");
+
+        return mv;
     }
 }

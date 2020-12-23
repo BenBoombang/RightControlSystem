@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR Ben
@@ -22,8 +23,22 @@ public class OrdersServiceImpl implements OrdersService {
     private OrdersDao ordersDao;
 
     @Override
-    public List<Orders> findAll(int page,int size) {
+    public List<Orders> findAll(Map<String,Object> map) {
+        Integer page =(Integer) map.get("page");
+        Integer size =(Integer) map.get("size");
         PageHelper.startPage(page,size);
         return ordersDao.findAll();
     }
+
+    @Override
+    public int queryCount() {
+        return ordersDao.queryCount();
+    }
+
+    @Override
+    public Orders queryById(String id) {
+        return ordersDao.queryById(id);
+    }
+
+
 }
