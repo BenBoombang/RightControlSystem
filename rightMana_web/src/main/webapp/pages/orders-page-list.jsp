@@ -239,26 +239,26 @@
 										<th class="text-center">操作</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody id="ordersData">
 
 									<%-- 从pageInfo对象中取出list结果集 --%>
-									<c:forEach items="${pageInfo.list}" var="orders">
+									<%--<c:forEach items="${pageInfo.list}" var="orders">--%>
 
-										<tr>
-											<td><input name="ids" type="checkbox"></td>
-											<td>${orders.id }</td>
-											<td>${orders.orderNum }</td>
-											<td>${orders.product.productName }</td>
-											<td>${orders.product.productPrice }</td>
-											<td>${orders.orderTimeStr }</td>
-											<td class="text-center">${orders.orderStatusStr }</td>
-											<td class="text-center">
-												<button type="button" class="btn bg-olive btn-xs">订单</button>
-												<button type="button" class="btn bg-olive btn-xs" onclick="location.href='${pageContext.request.contextPath}/orders/findById.do?id=${orders.id}'">详情</button>
-												<button type="button" class="btn bg-olive btn-xs">编辑</button>
-											</td>
-										</tr>
-									</c:forEach>
+										<%--<tr>--%>
+											<%--<td><input name="ids" type="checkbox"></td>--%>
+											<%--<td>${orders.id }</td>--%>
+											<%--<td>${orders.orderNum }</td>--%>
+											<%--<td>${orders.product.productName }</td>--%>
+											<%--<td>${orders.product.productPrice }</td>--%>
+											<%--<td>${orders.orderTimeStr }</td>--%>
+											<%--<td class="text-center">${orders.orderStatusStr }</td>--%>
+											<%--<td class="text-center">--%>
+												<%--<button type="button" class="btn bg-olive btn-xs">订单</button>--%>
+												<%--<button type="button" class="btn bg-olive btn-xs" onclick="location.href='${pageContext.request.contextPath}/orders/findById.do?id=${orders.id}'">详情</button>--%>
+												<%--<button type="button" class="btn bg-olive btn-xs">编辑</button>--%>
+											<%--</td>--%>
+										<%--</tr>--%>
+									<%--</c:forEach>--%>
 								</tbody>
 								<!--
                             <tfoot>
@@ -460,7 +460,10 @@
 		src="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/plugins/layer/layer.js"></script>
 	<script>
+
 		function changePageSize() {
 			//获取下拉框的值
 			var pageSize = $("#changePageSize").val();
@@ -477,6 +480,8 @@
 			$(".textarea").wysihtml5({
 				locale : 'zh-CN'
 			});
+
+
 		});
 
 		// 设置激活菜单
@@ -508,7 +513,62 @@
 				}
 				$(this).data("clicks", !clicks);
 			});
+
+			pageQuery(1,5);
 		});
+
+
+		// 创建分页函数
+		function pageQuery(pageno,pagesize) {
+			var pageQueryLoding = null;
+
+			$.ajax({
+				type : "post",
+				url : "${pageContext.request.contextPath}/orders/findAll",
+				data : {
+					"page" : pageno,
+					"size" : pagesize
+				},
+				beforeSend : function () {
+					pageQueryLoding = layer.msg('数据加载中',{icon:16});
+				},
+				success : function (result) {
+					layer.close(pageQueryLoding);
+					if (result.succ){
+
+						var ordersDataContent = "";
+
+						// 这个就是返回的 pageHelper 对象，也就是传统的 page 对象
+						var pageObj = result.data;
+						// 从 pageHelper 对象中获取数据 list
+
+						$.each(pageObj.list,function (i, orders) {
+							ordersDataContent += '<tr>';
+							ordersDataContent += '<td><input name="ids" type="checkbox"></td>';
+							ordersDataContent += '<td>' + orders.id + '</td>';
+							ordersDataContent += '<td>' + orders.orderNum + '</td>';
+							ordersDataContent += '<td>' + orders.product.productName + '</td>';
+							ordersDataContent += '<td>' + orders.product.productPrice + '</td>';
+							ordersDataContent += '<td>' + orders.orderTimeStr + '</td>';
+							ordersDataContent += '<td class="text-center">' + orders.orderStatusStr + '</td>';
+							ordersDataContent += '<td class="text-center">';
+							ordersDataContent += '      <button type="button" class="btn bg-olive btn-xs">订单</button>';
+							ordersDataContent += '      <button type="button" class="btn bg-olive btn-xs" onclick="queryDetailById('+ orders.id +')" >详情</button>';
+							ordersDataContent += '      <button type="button" class="btn bg-olive btn-xs">编辑</button>';
+							ordersDataContent += '</td>' ;
+							ordersDataContent += '</tr>';
+						});
+
+						$("#ordersData").html(ordersDataContent);
+
+					} else {
+						layer.msg("相关数据不存在", {time:2000, icon:5, shift:6},function () {
+							// 回调函数
+						});
+					}
+				}
+			});
+		}
 	</script>
 </body>
 
