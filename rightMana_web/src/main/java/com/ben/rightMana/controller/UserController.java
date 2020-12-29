@@ -28,4 +28,20 @@ public class UserController {
         mv.setViewName("user-list");
         return mv;
     }
+
+    @RequestMapping("/save")
+    public String save(UserInfo userInfo){
+        userService.save(userInfo);
+        return "redirect:queryAll";
+    }
+
+    @RequestMapping("/queryDetailById")
+    public ModelAndView queryDetailById(Integer userId){
+        ModelAndView mv = new ModelAndView();
+        UserInfo user = userService.queryDetailById(userId);
+        mv.addObject("user",user);
+        mv.setViewName("user-show");
+
+        return mv;
+    }
 }

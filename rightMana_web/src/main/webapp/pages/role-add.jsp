@@ -62,7 +62,7 @@
 	href="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css">
 </head>
 
-<body class="hold-transition skin-purple sidebar-mini">
+	<body class="hold-transition skin-purple sidebar-mini">
 
 	<div class="wrapper">
 
@@ -79,55 +79,37 @@
 			<!-- 内容头部 -->
 			<section class="content-header">
 			<h1>
-				用户管理 <small>用户表单</small>
+				角色管理 <small>角色表单</small>
 			</h1>
 			<ol class="breadcrumb">
 				<li><a href="${pageContext.request.contextPath}/index.jsp"><i
 						class="fa fa-dashboard"></i> 首页</a></li>
-				<li><a
-					href="${pageContext.request.contextPath}/user/findAll.do">用户管理</a></li>
-				<li class="active">用户表单</li>
+				<li><a href="${pageContext.request.contextPath}/role/findAll.do">角色管理</a></li>
+				<li class="active">角色表单</li>
 			</ol>
 			</section>
 			<!-- 内容头部 /-->
 
-			<form action="${pageContext.request.contextPath}/user/save"
+			<form action="${pageContext.request.contextPath}/role/save.do"
 				method="post">
 				<!-- 正文区域 -->
 				<section class="content"> <!--产品信息-->
 
 				<div class="panel panel-default">
-					<div class="panel-heading">用户信息</div>
+					<div class="panel-heading">角色信息</div>
 					<div class="row data-type">
 
-						<div class="col-md-2 title">用户名称</div>
+						<div class="col-md-2 title">角色名称</div>
 						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="username"
-								placeholder="用户名称" value="">
+							<input type="text" class="form-control" name="roleName"
+								placeholder="角色名称" value="">
 						</div>
-						<div class="col-md-2 title">密码</div>
+						<div class="col-md-2 title">角色描述</div>
 						<div class="col-md-4 data">
-							<input type="password" class="form-control" name="password"
-								placeholder="密码" value="">
+							<input type="text" class="form-control" name="roleDesc"
+								placeholder="角色描述" value="">
 						</div>
-						<div class="col-md-2 title">邮箱</div>
-						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="email"
-								placeholder="邮箱" value="">
-						</div>
-						<div class="col-md-2 title">联系电话</div>
-						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="phoneNum"
-								placeholder="联系电话" value="">
-						</div>
-						<div class="col-md-2 title">用户状态</div>
-						<div class="col-md-4 data">
-							<select class="form-control select2" style="width: 100%"
-								name="status">
-								<option value="0" selected="selected">关闭</option>
-								<option value="1">开启</option>
-							</select>
-						</div>
+										
 
 					</div>
 				</div>
@@ -261,8 +243,9 @@
 				liObj.addClass("active");
 			}
 		}
-	</script>
 
+	</script>
+	
 
 </body>
 

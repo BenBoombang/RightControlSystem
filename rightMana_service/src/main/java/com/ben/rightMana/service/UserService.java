@@ -12,4 +12,7 @@ import java.util.List;
 public interface UserService extends UserDetailsService {
     List<UserInfo> queryAll();
 
+    void save(UserInfo userInfo);
+
+    UserInfo queryDetailById(Integer userId);
 }
