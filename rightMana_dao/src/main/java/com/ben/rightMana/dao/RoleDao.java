@@ -1,5 +1,6 @@
 package com.ben.rightMana.dao;
 
+import com.ben.rightMana.domain.Permission;
 import com.ben.rightMana.domain.Role;
 import org.apache.ibatis.annotations.*;
 
@@ -24,4 +25,13 @@ public interface RoleDao {
 
     @Insert("insert into role(roleName,roleDesc) values(#{roleName},#{roleDesc})")
     void save(Role role);
+
+    @Select("select * from role where id = #{roleId}")
+    Role queryDetailById(Integer roleId);
+
+    @Select("select * from permission where id not in (select permissionId from role_permission where roleId + #{roleId})")
+    List<Permission> queryUnaddPermission(Integer roleId);
+
+    @Insert("insert into role_permission(roleId,permissionId) values(#{roleId},#{permissionId})")
+    void addPermissionToRole(@Param("roleId") Integer roleId,@Param("permissionId") Integer permissionId);
 }

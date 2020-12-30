@@ -68,4 +68,17 @@ public class UserServiceImpl implements UserService {
     public UserInfo queryDetailById(Integer userId) {
         return userDao.queryDetailById(userId);
     }
+
+    @Override
+    public List<Role> queryUnaddRole(Integer userId) {
+        return userDao.queryUnaddRole(userId);
+    }
+
+    @Override
+    public void addRoleToUser(Integer userId, Integer[] roleIds) {
+
+        for (int i = 0;i < roleIds.length;i++){
+            userDao.addRoleToUser(userId,roleIds[i]);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.ben.rightMana.service.Impl;
 
 import com.ben.rightMana.dao.RoleDao;
+import com.ben.rightMana.domain.Permission;
 import com.ben.rightMana.domain.Role;
 import com.ben.rightMana.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,22 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void save(Role role) {
         roleDao.save(role);
+    }
+
+    @Override
+    public Role queryDetailById(Integer roleId) {
+        return roleDao.queryDetailById(roleId);
+    }
+
+    @Override
+    public List<Permission> queryUnaddPermission(Integer roleId) {
+        return roleDao.queryUnaddPermission(roleId);
+    }
+
+    @Override
+    public void addPermissionToRole(Integer roleId, Integer[] permissionIds) {
+        for (int i = 0;i < permissionIds.length;i++){
+            roleDao.addPermissionToRole(roleId,permissionIds[i]);
+        }
     }
 }

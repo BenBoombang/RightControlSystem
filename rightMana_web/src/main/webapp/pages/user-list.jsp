@@ -155,7 +155,7 @@
 											<td>${user.statusStr }</td>											
 											<td class="text-center">
 												<a href="${pageContext.request.contextPath}/user/queryDetailById?userId=${user.id}" class="btn bg-olive btn-xs">详情</a>
-												<a href="${pageContext.request.contextPath}/user/findUserByIdAndAllRole.do?id=${user.id}" class="btn bg-olive btn-xs">添加角色</a>
+												<a href="${pageContext.request.contextPath}/user/queryUserByIdAndAllRole?id=${user.id}" class="btn bg-olive btn-xs">添加角色</a>
 											</td>
 										</tr>
 									</c:forEach>

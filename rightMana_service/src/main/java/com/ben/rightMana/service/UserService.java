@@ -1,5 +1,6 @@
 package com.ben.rightMana.service;
 
+import com.ben.rightMana.domain.Role;
 import com.ben.rightMana.domain.UserInfo;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -15,4 +16,8 @@ public interface UserService extends UserDetailsService {
     void save(UserInfo userInfo);
 
     UserInfo queryDetailById(Integer userId);
+
+    List<Role> queryUnaddRole(Integer userId);
+
+    void addRoleToUser(Integer userId, Integer[] roleIds);
 }
