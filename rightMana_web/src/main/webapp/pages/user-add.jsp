@@ -6,9 +6,7 @@
 <!-- 页面meta -->
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>数据 - AdminLTE2定制版</title>
-<meta name="description" content="AdminLTE2定制版">
-<meta name="keywords" content="AdminLTE2定制版">
+<title>管理系统|新增用户</title>
 
 <!-- Tell the browser to be responsive to screen width -->
 <meta
@@ -85,7 +83,7 @@
 				<li><a href="${pageContext.request.contextPath}/index.jsp"><i
 						class="fa fa-dashboard"></i> 首页</a></li>
 				<li><a
-					href="${pageContext.request.contextPath}/user/findAll.do">用户管理</a></li>
+					href="${pageContext.request.contextPath}/user/queryAll">用户管理</a></li>
 				<li class="active">用户表单</li>
 			</ol>
 			</section>
@@ -146,10 +144,10 @@
 		<!-- 底部导航 -->
 		<footer class="main-footer">
 		<div class="pull-right hidden-xs">
-			<b>Version</b> 1.0.8
+			<b>Version</b> 1.0.0
 		</div>
-		<strong>Copyright &copy; 2014-2017 <a
-			href="http://www.itcast.cn">研究院研发部</a>.
+		<strong>Copyright &copy; 2020-2021 <a
+			href="#">BenBoy</a>.
 		</strong> All rights reserved. </footer>
 		<!-- 底部导航 /-->
 

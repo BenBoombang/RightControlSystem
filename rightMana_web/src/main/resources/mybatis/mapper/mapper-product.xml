@@ -4,6 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ben.rightMana.dao.ProductDao">
+
+    <select id="pageQuery" resultType="com.ben.rightMana.domain.Product">
+        select * from product where 1=1
+        <if test="queryText != null">
+            and productNum like concat('%',#{queryText},'%')
+        </if>
+    </select>
+
     <insert id="save">
         insert into
         product(
@@ -29,4 +37,48 @@
         select * from product where id = #{id}
     </select>
 
+
+    <update id="updateProduct">
+        update product set
+        productNum = #{productNum},
+        productName = #{productName},
+        cityName = #{cityName},
+        departureTime = #{departureTime},
+        productPrice = #{productPrice},
+        productDesc = #{productDesc},
+        productStatus = #{productStatus}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProducts">
+        delete from product where id in
+        <foreach collection="productIds" item="productId" open="(" close=")" separator=",">
+            #{productId}
+        </foreach>
+    </delete>
+
+    <update id="openStatus">
+        update product set
+        productStatus = 1
+        where id in
+        <foreach collection="productIds" item="productId" open="(" close=")" separator=",">
+            #{productId}
+        </foreach>
+    </update>
+
+    <update id="closeStatus">
+        update product set
+        productStatus = 0
+        where id in
+        <foreach collection="productIds" item="productId" open="(" close=")" separator=",">
+            #{productId}
+        </foreach>
+    </update>
+    
+    <select id="exportQuery" resultType="com.ben.rightMana.domain.Product">
+        select * from product where 1=1
+        <if test="queryText != ''">
+            and productNum like concat('%',#{queryText},'%')
+        </if>
+    </select>
 </mapper>

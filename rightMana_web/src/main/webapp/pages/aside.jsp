@@ -32,19 +32,19 @@
 			</a>
 				<ul class="treeview-menu">
 
-					<li id="system-setting"><a
+					<li><a
 						href="${pageContext.request.contextPath}/user/queryAll"> <i
 							class="fa fa-circle-o"></i> 用户管理
 					</a></li>
-					<li id="system-setting"><a
+					<li><a
 						href="${pageContext.request.contextPath}/role/queryAll"> <i
 							class="fa fa-circle-o"></i> 角色管理
 					</a></li>
-					<li id="system-setting"><a
+					<li><a
 						href="${pageContext.request.contextPath}/permission/queryAll">
 							<i class="fa fa-circle-o"></i> 资源权限管理
 					</a></li>
-					<li id="system-setting"><a
+					<li><a
 						href="${pageContext.request.contextPath}/sysLog/findAll.do"> <i
 							class="fa fa-circle-o"></i> 访问日志
 					</a></li>
@@ -56,13 +56,11 @@
 			</a>
 				<ul class="treeview-menu">
 
-					<li id="system-setting"><a
-						href="${pageContext.request.contextPath}/product/findAll">
+					<li><a
+						href="${pageContext.request.contextPath}/product/queryAll">
 							<i class="fa fa-circle-o"></i> 产品管理
 					</a></li>
-					<li id="system-setting"><a
-						<%--href="${pageContext.request.contextPath}/orders/findAll?page=1&size=4"> <i--%>
-							<%--class="fa fa-circle-o"></i> 订单管理--%>
+					<li><a
 
 						href="${pageContext.request.contextPath}/orders/main"> <i
 								class="fa fa-circle-o"></i> 订单管理

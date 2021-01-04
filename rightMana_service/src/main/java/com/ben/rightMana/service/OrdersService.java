@@ -12,9 +12,13 @@ import java.util.Map;
 public interface OrdersService {
 
     // 查询所有订单
-    List<Orders> findAll(Map<String,Object> map);
+    List<Orders> pageQuery(Map<String,Object> map);
 
     int queryCount();
 
     Orders queryById(String id);
+
+    void delete(Integer orderId);
+
+    List<Orders> exportQuery(Map<String, Object> map);
 }

@@ -4,6 +4,7 @@ import com.ben.rightMana.domain.Permission;
 import com.ben.rightMana.domain.Role;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR Ben
@@ -20,4 +21,7 @@ public interface RoleService {
 
     void addPermissionToRole(Integer roleId, Integer[] permissionIds);
 
+    List<Role> pageQuery(Map<String, Object> map);
+
+    void updateRole(Role role);
 }

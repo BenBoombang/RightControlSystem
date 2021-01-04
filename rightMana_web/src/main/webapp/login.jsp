@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>数据 - AdminLTE2定制版 | Log in</title>
+<title>管理系统登录|登录首页</title>
 
 <meta
 	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
@@ -27,7 +27,7 @@
 <body class="hold-transition login-page">
 	<div class="login-box">
 		<div class="login-logo">
-			<a href="all-admin-index.html"><b>ITCAST</b>后台管理系统</a>
+			<a href="#"><b>BenBoy</b>后台管理系统</a>
 		</div>
 		<!-- /.login-logo -->
 		<div class="login-box-body">
@@ -37,7 +37,7 @@
 				<div class="form-group has-feedback">
 					<input type="text" name="username" class="form-control"
 						placeholder="用户名"> <span
-						class="glyphicon glyphicon-envelope form-control-feedback"></span>
+						class="glyphicon glyphicon-user form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback">
 					<input type="password" name="password" class="form-control"
@@ -47,7 +47,7 @@
 				<div class="row">
 					<div class="col-xs-8">
 						<div class="checkbox icheck">
-							<label><input type="checkbox"> 记住 下次自动登录</label>
+							<label><input type="checkbox" name="remember-me"> 记住 下次自动登录</label>
 						</div>
 					</div>
 					<!-- /.col -->

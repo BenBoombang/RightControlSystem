@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ben.rightMana.dao.UserDao">
+
+    <select id="pageQuery" resultType="com.ben.rightMana.domain.UserInfo">
+        select * from users where 1=1
+        <if test="queryText != null">
+            and username like concat('%',#{queryText},'%')
+        </if>
+    </select>
+
+    <update id="openStatus">
+        update users set status = 1
+        where id in
+        <foreach collection="userIds" item="userId" open="(" close=")" separator=",">
+            #{userId}
+        </foreach>
+    </update>
+
+    <update id="closeStatus">
+        update users set status = 0
+        where id in
+        <foreach collection="userIds" item="userId" open="(" close=")" separator=",">
+            #{userId}
+        </foreach>
+    </update>
+
+    <select id="exportQuery" resultType="com.ben.rightMana.domain.UserInfo">
+        select * from users where 1=1
+        <if test="queryText != null">
+            and username like concat('%',#{queryText},'%')
+        </if>
+    </select>
+</mapper>

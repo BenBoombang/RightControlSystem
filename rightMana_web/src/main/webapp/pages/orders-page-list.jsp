@@ -10,13 +10,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-
-
-
-<title>数据 - AdminLTE2定制版</title>
-<meta name="description" content="AdminLTE2定制版">
-<meta name="keywords" content="AdminLTE2定制版">
-
+<title>管理系统|订单管理</title>
 
 
 
@@ -158,21 +152,18 @@
 		<jsp:include page="aside.jsp"></jsp:include>
 		<!-- 导航侧栏 /-->
 
-		<!-- 内容区域 -->
-		<!-- @@master = admin-layout.html-->
-		<!-- @@block = content -->
 
 		<div class="content-wrapper">
 
 			<!-- 内容头部 -->
 			<section class="content-header">
 				<h1>
-					数据管理 <small>数据列表</small>
+					订单管理 <small>订单列表</small>
 				</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
-					<li><a href="#">数据管理</a></li>
-					<li class="active">数据列表</li>
+					<li><a href="#">基础数据</a></li>
+					<li class="active">订单管理</li>
 				</ol>
 			</section>
 			<!-- 内容头部 /-->
@@ -195,30 +186,22 @@
 							<div class="pull-left">
 								<div class="form-group form-inline">
 									<div class="btn-group">
-										<button type="button" class="btn btn-default" title="新建"
-											onclick="location.href='${pageContext.request.contextPath}/pages/product-add.jsp'">
-											<i class="fa fa-file-o"></i> 新建
-										</button>
-										<button type="button" class="btn btn-default" title="删除">
-											<i class="fa fa-trash-o"></i> 删除
-										</button>
-										<button type="button" class="btn btn-default" title="开启">
-											<i class="fa fa-check"></i> 开启
-										</button>
-										<button type="button" class="btn btn-default" title="屏蔽">
-											<i class="fa fa-ban"></i> 屏蔽
-										</button>
-										<button type="button" class="btn btn-default" title="刷新">
+										<button type="button" class="btn btn-default" onclick="window.location.reload();" title="刷新">
 											<i class="fa fa-refresh"></i> 刷新
+										</button>
+										<button type="button" class="btn btn-default" onclick="orderExportToExcel()" title="刷新">
+											<i class="fa fa-download"></i> 导出
 										</button>
 									</div>
 								</div>
 							</div>
-							<div class="box-tools pull-right">
-								<div class="has-feedback">
+							<div class="box-tools pull-right col-md-2">
+								<div class="has-feedback input-group">
+									<span class="input-group-btn">
+										<button class="btn btn-primary btn-sm" type="button" onclick="orderPageQuery(1)">搜索</button>
+									</span>
 									<input type="text" class="form-control input-sm"
-										placeholder="搜索"> <span
-										class="glyphicon glyphicon-search form-control-feedback"></span>
+										   placeholder="订单编号" name="queryText" id="queryText" />
 								</div>
 							</div>
 							<!--工具栏/-->
@@ -259,40 +242,7 @@
 
 							<%-- 定义一个标签域，用来存每页显示多少数据 --%>
 							<input type="hidden" id="hiddenPageSize">
-
-
 							<!--数据列表/-->
-
-							<!--工具栏-->
-							<div class="pull-left">
-								<div class="form-group form-inline">
-									<div class="btn-group">
-										<button type="button" class="btn btn-default" title="新建">
-											<i class="fa fa-file-o"></i> 新建
-										</button>
-										<button type="button" class="btn btn-default" title="删除">
-											<i class="fa fa-trash-o"></i> 删除
-										</button>
-										<button type="button" class="btn btn-default" title="开启">
-											<i class="fa fa-check"></i> 开启
-										</button>
-										<button type="button" class="btn btn-default" title="屏蔽">
-											<i class="fa fa-ban"></i> 屏蔽
-										</button>
-										<button type="button" class="btn btn-default" title="刷新">
-											<i class="fa fa-refresh"></i> 刷新
-										</button>
-									</div>
-								</div>
-							</div>
-							<div class="box-tools pull-right">
-								<div class="has-feedback">
-									<input type="text" class="form-control input-sm"
-										placeholder="搜索"> <span
-										class="glyphicon glyphicon-search form-control-feedback"></span>
-								</div>
-							</div>
-							<!--工具栏/-->
 
 						</div>
 						<!-- 数据表格 /-->
@@ -304,15 +254,8 @@
 					<!-- .box-footer-->
                 <div class="box-footer">
                     <div class="pull-left">
-                        <div class="form-group form-inline">
-                            总共2 页，共14 条数据。 每页
-                            <select class="form-control" id="changePageSize" onchange="changePageSize()">
-                                <option>1</option>
-                                <option>2</option>
-                                <option selected="selected">3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select> 条
+                        <div class="form-group form-inline" id="footData">
+
                         </div>
                     </div>
 
@@ -339,10 +282,10 @@
 		<!-- 底部导航 -->
 		<footer class="main-footer">
 			<div class="pull-right hidden-xs">
-				<b>Version</b> 1.0.8
+				<b>Version</b> 1.0.0
 			</div>
-			<strong>Copyright &copy; 2014-2017 <a
-				href="http://www.itcast.cn">研究院研发部</a>.
+			<strong>Copyright &copy; 2020-2021 <a
+				href="#">BenBoy</a>.
 			</strong> All rights reserved.
 		</footer>
 		<!-- 底部导航 /-->
@@ -443,17 +386,18 @@
 		src="${pageContext.request.contextPath}/plugins/jqPage/jqPaginator.js"></script>
 	<script>
 
-		function changePageSize() {
+		function orderChangePageSize() {
 			//获取下拉框的值
-			var pageSize = $("#changePageSize").val();
+			var pageSize = $("#selectPageSize").val();
 
 			// 将这个放到隐藏域中
 			$("#hiddenPageSize").val(pageSize);
 
 			// 然后立刻进行一次分页查询
-			pageQuery(1);
+			orderPageQuery(1);
 
 		}
+
 		$(document).ready(function() {
 			// 选择框
 			$(".select2").select2();
@@ -463,7 +407,7 @@
 				locale : 'zh-CN'
 			});
 
-			pageQuery(1);
+			orderPageQuery(1);
 		});
 
 		// 设置激活菜单
@@ -498,15 +442,21 @@
 
 		});
 
+		// 导出到Excel
+		function orderExportToExcel() {
+			// 首先获取筛选框中的条件
+			var qryText = $("#queryText").val();
+			window.location.href="${pageContext.request.contextPath}/orders/export?queryText=" + qryText;
+		}
+
 		// 创建用来查询订单相关的详细信息的方法
 		function queryOrderDetailById(id) {
 			window.location.href="${pageContext.request.contextPath}/orders/queryById?id=" + id;
 		}
 
 
-
 		// 创建分页函数
-		function pageQuery(pageno) {
+		function orderPageQuery(pageno) {
 			var pageQueryLoding = null;
 
 			// 获取记录页面数据量的隐藏域的值
@@ -515,13 +465,22 @@
 				mySize = 3;
 			}
 
+			// 创建初始筛选条件
+			var ajaxData = {
+				"pageno" : pageno,
+				"pagesize" : mySize
+			};
+
+			// 尝试从筛选条件框中获取数据
+			var text= $("#queryText").val();
+			if (text != ""){
+				ajaxData.queryText = text;
+			}
+
 			$.ajax({
 				type : "post",
-				url : "${pageContext.request.contextPath}/orders/findAll",
-				data : {
-					"page" : pageno,
-					"size" : mySize
-				},
+				url : "${pageContext.request.contextPath}/orders/pageQuery",
+				data : ajaxData,
 				beforeSend : function () {
 					pageQueryLoding = layer.msg('数据加载中',{icon:16});
 				},
@@ -531,28 +490,44 @@
 
 						var ordersDataContent = "";
 
+						var footContent = "";
+
 						// 这个就是返回的 pageHelper 对象，也就是传统的 page 对象
 						var pageObj = result.data;
 						// 从 pageHelper 对象中获取数据 list
 
 						$.each(pageObj.list,function (i, orders) {
 							ordersDataContent += '<tr>';
-							ordersDataContent += '<td><input name="ids" type="checkbox"></td>';
+							ordersDataContent += '<td><input name="ids" type="checkbox" value="'+ orders.id +'"></td>';
 							ordersDataContent += '<td>' + orders.id + '</td>';
 							ordersDataContent += '<td>' + orders.orderNum + '</td>';
-							ordersDataContent += '<td>' + orders.product.productName + '</td>';
-							ordersDataContent += '<td>' + orders.product.productPrice + '</td>';
+							ordersDataContent += '<td>' + (orders.product.productName == null ? "" : orders.product.productName) + '</td>';
+							ordersDataContent += '<td>' + (orders.product.productPrice == null ? "" : orders.product.productPrice) + '</td>';
 							ordersDataContent += '<td>' + orders.orderTimeStr + '</td>';
 							ordersDataContent += '<td class="text-center">' + orders.orderStatusStr + '</td>';
 							ordersDataContent += '<td class="text-center">';
-							ordersDataContent += '      <button type="button" class="btn bg-olive btn-xs">订单</button>';
 							ordersDataContent += '      <button type="button" class="btn bg-olive btn-xs" onclick="queryOrderDetailById('+ orders.id +')" >详情</button>';
-							ordersDataContent += '      <button type="button" class="btn bg-olive btn-xs">编辑</button>';
 							ordersDataContent += '</td>' ;
 							ordersDataContent += '</tr>';
 						});
 
 						$("#ordersData").html(ordersDataContent);
+
+						// 给 pageSize 隐藏域赋值
+						$("#hiddenPageSize").val(pageObj.pageSize);
+
+						footContent += '总共 <strong> ' +pageObj.pages + ' </strong> 页，共 <strong> ' + pageObj.total + ' </strong> 条数据。每页 <select class="form-control" id="selectPageSize" onchange="orderChangePageSize()">';
+						footContent += '<option value="1">1</option>';
+						footContent += '<option value="2">2</option>';
+						footContent += '<option value="3">3</option>';
+						footContent += '<option value="4">4</option>';
+						footContent += '<option value="5">5</option>';
+						footContent += '</select> 条';
+
+						// 构建左下角内容
+						$("#footData").html(footContent);
+
+						$("#selectPageSize option[value='"+ pageObj.pageSize +"']").attr("selected", true);
 
 						$.jqPaginator(".pagination", {
 							// totalPages: 100, //设置分页的总页数
@@ -568,7 +543,7 @@
 							onPageChange: function (num, type) {
 								//页面变化回调函数
 								if (type == "change") {
-									pageQuery(num);//当前页码
+									orderPageQuery(num);//当前页码
 								}
 							}
 						});

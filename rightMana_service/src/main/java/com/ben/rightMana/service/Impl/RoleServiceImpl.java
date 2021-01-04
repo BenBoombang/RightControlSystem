@@ -4,11 +4,13 @@ import com.ben.rightMana.dao.RoleDao;
 import com.ben.rightMana.domain.Permission;
 import com.ben.rightMana.domain.Role;
 import com.ben.rightMana.service.RoleService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR Ben
@@ -46,5 +48,24 @@ public class RoleServiceImpl implements RoleService {
         for (int i = 0;i < permissionIds.length;i++){
             roleDao.addPermissionToRole(roleId,permissionIds[i]);
         }
+    }
+
+    @Override
+    public List<Role> pageQuery(Map<String, Object> map) {
+        int pageno =(Integer) map.get("pageno");
+        int pagesize =(Integer) map.get("pagesize");
+
+        String queryText = null;
+        if (map.containsKey("queryText")){
+            queryText = map.get("queryText").toString();
+        }
+
+        PageHelper.startPage(pageno,pagesize);
+        return roleDao.pageQuery(queryText);
+    }
+
+    @Override
+    public void updateRole(Role role) {
+        roleDao.updateRole(role);
     }
 }

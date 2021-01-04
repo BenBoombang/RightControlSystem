@@ -8,9 +8,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>数据 - AdminLTE2定制版</title>
-<meta name="description" content="AdminLTE2定制版">
-<meta name="keywords" content="AdminLTE2定制版">
+<title>管理系统|角色列表</title>
 
 <!-- Tell the browser to be responsive to screen width -->
 <meta
@@ -85,7 +83,7 @@
 				<li><a href="${pageContext.request.contextPath}/index.jsp"><i
 						class="fa fa-dashboard"></i> 首页</a></li>
 				<li><a
-					href="${pageContext.request.contextPath}/role/findAll.do">角色管理</a></li>
+					href="${pageContext.request.contextPath}/role/queryAll">角色管理</a></li>
 
 				<li class="active">全部角色</li>
 			</ol>
@@ -112,19 +110,21 @@
 											<i class="fa fa-file-o"></i> 新建
 										</button>
 										
-										<button type="button" class="btn btn-default" title="刷新">
+										<button type="button" class="btn btn-default" onclick="window.location.reload();" title="刷新">
 											<i class="fa fa-refresh"></i> 刷新
 										</button>
 									</div>
 								</div>
 							</div>
-							<div class="box-tools pull-right">
-								<div class="has-feedback">
-									<input type="text" class="form-control input-sm"
-										placeholder="搜索"> <span
-										class="glyphicon glyphicon-search form-control-feedback"></span>
-								</div>
-							</div>
+                            <div class="box-tools pull-right col-md-2">
+                                <div class="has-feedback input-group">
+									<span class="input-group-btn">
+										<button class="btn btn-primary btn-sm" type="button" onclick="rolePageQuery(1)">搜索</button>
+									</span>
+                                    <input type="text" class="form-control input-sm"
+                                           placeholder="角色名" name="queryText" id="queryText" />
+                                </div>
+                            </div>
 							<!--工具栏/-->
 
 							<!--数据列表-->
@@ -141,34 +141,15 @@
 										<th class="text-center">操作</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody id="roleData">
 
-									<c:forEach items="${roleList}" var="role">
-										<tr>
-											<td><input name="ids" type="checkbox"></td>
-											<td>${role.id }</td>
-											<td>${role.roleName }</td>
-											<td>${role.roleDesc }</td>																				
-											<td class="text-center">
-												<a href="${pageContext.request.contextPath}/role/findById?id=${role.id}" class="btn bg-olive btn-xs">详情</a>
-												<a href="${pageContext.request.contextPath}/role/queryRoleByIdAndAllPermission?id=${role.id}" class="btn bg-olive btn-xs">添加权限</a>
-											</td>
-										</tr>
-									</c:forEach>
 								</tbody>
-								<!--
-                            <tfoot>
-                            <tr>
-                            <th>Rendering engine</th>
-                            <th>Browser</th>
-                            <th>Platform(s)</th>
-                            <th>Engine version</th>
-                            <th>CSS grade</th>
-                            </tr>
-                            </tfoot>-->
+
 							</table>
 							<!--数据列表/-->
 
+                            <%-- 隐藏域 用来存储 pageSize --%>
+                            <input type="hidden" id="hiddenPageSize">
 						</div>
 						<!-- 数据表格 /-->
 
@@ -178,28 +159,14 @@
 					<!-- .box-footer-->
 					<div class="box-footer">
 						<div class="pull-left">
-							<div class="form-group form-inline">
-								总共2 页，共14 条数据。 每页 <select class="form-control">
-									<option>1</option>
-									<option>2</option>
-									<option>3</option>
-									<option>4</option>
-									<option>5</option>
-								</select> 条
+							<div class="form-group form-inline" id="footData">
+
 							</div>
 						</div>
 
 						<div class="box-tools pull-right">
 							<ul class="pagination">
-								<li><a href="#" aria-label="Previous">首页</a></li>
-								<li><a href="#">上一页</a></li>
-								<li><a href="#">1</a></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#">5</a></li>
-								<li><a href="#">下一页</a></li>
-								<li><a href="#" aria-label="Next">尾页</a></li>
+
 							</ul>
 						</div>
 
@@ -218,63 +185,65 @@
 			<!-- 底部导航 -->
 			<footer class="main-footer">
 			<div class="pull-right hidden-xs">
-				<b>Version</b> 1.0.8
+				<b>Version</b> 1.0.0
 			</div>
-			<strong>Copyright &copy; 2014-2017 <a
-				href="http://www.itcast.cn">研究院研发部</a>.
+			<strong>Copyright &copy; 2020-2021 <a
+				href="#">BenBoy</a>.
 			</strong> All rights reserved. </footer>
 			<!-- 底部导航 /-->
 
 		</div>
 
-		<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
-		<script src="../plugins/jQueryUI/jquery-ui.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/jQueryUI/jquery-ui.min.js"></script>
 		<script>
 			$.widget.bridge('uibutton', $.ui.button);
 		</script>
-		<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
-		<script src="../plugins/raphael/raphael-min.js"></script>
-		<script src="../plugins/morris/morris.min.js"></script>
-		<script src="../plugins/sparkline/jquery.sparkline.min.js"></script>
-		<script src="../plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-		<script src="../plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-		<script src="../plugins/knob/jquery.knob.js"></script>
-		<script src="../plugins/daterangepicker/moment.min.js"></script>
-		<script src="../plugins/daterangepicker/daterangepicker.js"></script>
-		<script src="../plugins/daterangepicker/daterangepicker.zh-CN.js"></script>
-		<script src="../plugins/datepicker/bootstrap-datepicker.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/bootstrap/js/bootstrap.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/raphael/raphael-min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/morris/morris.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/sparkline/jquery.sparkline.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/knob/jquery.knob.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/daterangepicker/moment.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/daterangepicker/daterangepicker.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/daterangepicker/daterangepicker.zh-CN.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/datepicker/bootstrap-datepicker.js"></script>
 		<script
-			src="../plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
+			src="${pageContext.request.contextPath}/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
 		<script
-			src="../plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-		<script src="../plugins/slimScroll/jquery.slimscroll.min.js"></script>
-		<script src="../plugins/fastclick/fastclick.js"></script>
-		<script src="../plugins/iCheck/icheck.min.js"></script>
-		<script src="../plugins/adminLTE/js/app.min.js"></script>
-		<script src="../plugins/treeTable/jquery.treetable.js"></script>
-		<script src="../plugins/select2/select2.full.min.js"></script>
-		<script src="../plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+			src="${pageContext.request.contextPath}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/fastclick/fastclick.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/iCheck/icheck.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/adminLTE/js/app.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/treeTable/jquery.treetable.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/select2/select2.full.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 		<script
-			src="../plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.zh-CN.js"></script>
-		<script src="../plugins/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+			src="${pageContext.request.contextPath}/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.zh-CN.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/bootstrap-markdown/js/bootstrap-markdown.js"></script>
 		<script
-			src="../plugins/bootstrap-markdown/locale/bootstrap-markdown.zh.js"></script>
-		<script src="../plugins/bootstrap-markdown/js/markdown.js"></script>
-		<script src="../plugins/bootstrap-markdown/js/to-markdown.js"></script>
-		<script src="../plugins/ckeditor/ckeditor.js"></script>
-		<script src="../plugins/input-mask/jquery.inputmask.js"></script>
+			src="${pageContext.request.contextPath}/plugins/bootstrap-markdown/locale/bootstrap-markdown.zh.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/bootstrap-markdown/js/markdown.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/bootstrap-markdown/js/to-markdown.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/ckeditor/ckeditor.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/input-mask/jquery.inputmask.js"></script>
 		<script
-			src="../plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-		<script src="../plugins/input-mask/jquery.inputmask.extensions.js"></script>
-		<script src="../plugins/datatables/jquery.dataTables.min.js"></script>
-		<script src="../plugins/datatables/dataTables.bootstrap.min.js"></script>
-		<script src="../plugins/chartjs/Chart.min.js"></script>
-		<script src="../plugins/flot/jquery.flot.min.js"></script>
-		<script src="../plugins/flot/jquery.flot.resize.min.js"></script>
-		<script src="../plugins/flot/jquery.flot.pie.min.js"></script>
-		<script src="../plugins/flot/jquery.flot.categories.min.js"></script>
-		<script src="../plugins/ionslider/ion.rangeSlider.min.js"></script>
-		<script src="../plugins/bootstrap-slider/bootstrap-slider.js"></script>
+			src="${pageContext.request.contextPath}/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/datatables/jquery.dataTables.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/datatables/dataTables.bootstrap.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/chartjs/Chart.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/flot/jquery.flot.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/flot/jquery.flot.resize.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/flot/jquery.flot.pie.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/flot/jquery.flot.categories.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/ionslider/ion.rangeSlider.min.js"></script>
+		<script src="${pageContext.request.contextPath}/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/layer/layer.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/jqPage/jqPaginator.js"></script>
 		<script>
 			$(document).ready(function() {
 				// 选择框
@@ -295,40 +264,149 @@
 				}
 			}
 
-			$(document)
-					.ready(
-							function() {
+			$(document).ready(function() {
 
-								// 激活导航位置
-								setSidebarActive("admin-datalist");
+				// 激活导航位置
+				setSidebarActive("admin-datalist");
 
-								// 列表按钮 
-								$("#dataList td input[type='checkbox']")
-										.iCheck(
-												{
-													checkboxClass : 'icheckbox_square-blue',
-													increaseArea : '20%'
-												});
-								// 全选操作 
-								$("#selall")
-										.click(
-												function() {
-													var clicks = $(this).is(
-															':checked');
-													if (!clicks) {
-														$(
-																"#dataList td input[type='checkbox']")
-																.iCheck(
-																		"uncheck");
-													} else {
-														$(
-																"#dataList td input[type='checkbox']")
-																.iCheck("check");
-													}
-													$(this).data("clicks",
-															!clicks);
-												});
-							});
+				// 列表按钮
+				$("#dataList td input[type='checkbox']").iCheck({
+					checkboxClass : 'icheckbox_square-blue',
+					increaseArea : '20%'
+				});
+				// 全选操作
+				$("#selall").click(function() {
+					var clicks = $(this).is(':checked');
+					if (!clicks) {
+						$("#dataList td input[type='checkbox']").iCheck("uncheck");
+					} else {
+						$("#dataList td input[type='checkbox']").iCheck("check");
+					}
+					$(this).data("clicks", !clicks);
+				});
+
+                rolePageQuery(1);
+			});
+
+			function roleEdit(id) {
+                window.location.href="${pageContext.request.contextPath}/role/roleEdit?id=" + id;
+            }
+
+            function queryRoleByIdAndAllPermission(id) {
+                window.location.href="${pageContext.request.contextPath}/role/queryRoleByIdAndAllPermission?id=" + id;
+            }
+
+            function roleChangePageSize() {
+                //获取下拉框的值
+                var pageSize = $("#selectPageSize").val();
+
+                // 将这个放到隐藏域中
+                $("#hiddenPageSize").val(pageSize);
+
+                // 然后立刻进行一次分页查询
+                rolePageQuery(1);
+            }
+
+            // 角色分页异步查询
+            function rolePageQuery(pageno) {
+
+                var roleLoading = null;
+
+                var roleContent = "";
+
+                var footContent = "";
+
+                // 先从隐藏域中获取 pageSize
+                var pagesize = $("#hiddenPageSize").val();
+                if (pagesize == "") {
+                    pagesize = 3;
+                }
+
+                var ajaxData = {
+                    "pageno" : pageno,
+                    "pagesize" : pagesize
+                };
+
+                // 获取搜索框的值
+                var text = $("#queryText").val();
+                if (text != ""){
+                    ajaxData.queryText = text;
+                }
+
+                $.ajax({
+                    type : "post",
+                    url : "${pageContext.request.contextPath}/role/pageQuery",
+                    data : ajaxData,
+                    beforeSend : function () {
+                        roleLoading = layer.msg('数据加载中',{icon:16});
+                    },
+                    success : function (result) {
+                        layer.close(roleLoading);
+
+                        if (result.succ){
+
+                            var pageInfo = result.data;
+
+                            $.each(pageInfo.list,function (i,role) {
+                                roleContent += '<tr>';
+                                roleContent += '<td><input name="ids" type="checkbox"></td>';
+                                roleContent += '<td>' + role.id + '</td>';
+                                roleContent += '<td>' + role.roleName + '</td>';
+                                roleContent += '<td>' + role.roleDesc + '</td>';
+                                roleContent += '<td class="text-center">';
+                                roleContent += '    <a href="#" onclick="roleEdit(' + role.id + ')" class="btn bg-olive btn-xs">角色编辑</a>';
+                                roleContent += '    <a href="#" onclick="queryRoleByIdAndAllPermission('+ role.id +')" class="btn bg-olive btn-xs">添加权限</a>';
+                                roleContent += '</td>';
+                                roleContent += '</tr>';
+                            });
+
+                            $("#roleData").html(roleContent);
+
+                            // 重新给隐藏域赋值
+                            $("#hiddenPageSize").val(pageInfo.pageSize);
+
+                            footContent += '总共 <strong> ' +pageInfo.pages + ' </strong> 页，共 <strong> ' + pageInfo.total + ' </strong> 条数据。每页 <select class="form-control" id="selectPageSize" onchange="roleChangePageSize()">';
+                            footContent += '<option value="1">1</option>';
+                            footContent += '<option value="2">2</option>';
+                            footContent += '<option value="3">3</option>';
+                            footContent += '<option value="4">4</option>';
+                            footContent += '<option value="5">5</option>';
+                            footContent += '</select> 条';
+
+                            // 构建左下角内容
+                            $("#footData").html(footContent);
+
+                            $("#selectPageSize option[value='"+ pageInfo.pageSize +"']").attr("selected", true);
+
+                            $.jqPaginator(".pagination", {
+                                // totalPages: 100, //设置分页的总页数
+                                totalCounts: pageInfo.total, //设置分页的总条目数
+                                pageSize: pageInfo.pageSize,
+                                visiblePages: 5, //设置最多显示的页码数（例如有100也，当前第1页，则显示1 - 7页）
+                                currentPage: pageInfo.pageNum,//当前页
+                                first: '<li class="first"><a href="javascript:;">首页</a></li>',
+                                prev: '<li class="prev"><a href="javascript:;"><i class="arrow arrow2"></i>上一页</a></li>',
+                                next: '<li class="next"><a href="javascript:;">下一页<i class="arrow arrow3"></i></a></li>',
+                                last: '<li class="last"><a href="javascript:;">末页</a></li>',
+                                page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+                                onPageChange: function (num, type) {
+                                    //页面变化回调函数
+                                    if (type == "change") {
+                                        rolePageQuery(num);//当前页码
+                                    }
+                                }
+                            });
+
+
+                        }else {
+                            layer.msg("没有相关数据", {time:2000, icon:5, shift:6}, function () {
+                                // 回调方法
+                            });
+                        }
+                    }
+                })
+            }
+
 		</script>
 </body>
 

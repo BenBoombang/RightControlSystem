@@ -6,13 +6,20 @@ import com.ben.rightMana.domain.Product;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR Ben
  * @time 20:05
  */
 public interface OrdersDao {
-    @Select("select * from orders")
+    @Select({"<script>" +
+            "select * from orders " +
+            "where 1=1 " +
+            "<if test='queryText != null'>" +
+            "and orderNum like concat('%',#{queryText},'%')" +
+            "</if>" +
+            "</script>"})
     @Results({
             @Result(property = "id",column = "id",id = true),
             @Result(property = "orderNum",column = "orderNum"),
@@ -23,7 +30,7 @@ public interface OrdersDao {
             @Result(property = "orderDesc",column = "orderDesc"),
             @Result(property = "product",column = "productId",javaType = Product.class,one = @One(select = "com.ben.rightMana.dao.ProductDao.findById")),
     })
-    List<Orders> findAll();
+    List<Orders> pageQuery(@Param("queryText") String queryText);
 
 
     @Select("select count(*) as countNum from orders")
@@ -44,4 +51,9 @@ public interface OrdersDao {
             @Result(property = "travellers",column = "id",javaType = java.util.List.class,many = @Many(select = "com.ben.rightMana.dao.TravellerDao.queryByOrderId"))
     })
     Orders queryById(String id);
+
+    @Delete("delete from orders where id = #{orderId}")
+    void delete(@Param("orderId") Integer orderId);
+
+    List<Orders> exportQuery(Map<String, Object> map);
 }

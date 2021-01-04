@@ -23,11 +23,17 @@ public class OrdersServiceImpl implements OrdersService {
     private OrdersDao ordersDao;
 
     @Override
-    public List<Orders> findAll(Map<String,Object> map) {
-        Integer page =(Integer) map.get("page");
-        Integer size =(Integer) map.get("size");
+    public List<Orders> pageQuery(Map<String,Object> map) {
+        Integer page =Integer.valueOf(map.get("page").toString());
+        Integer size =Integer.valueOf(map.get("size").toString());
+
+        String queryText = null;
+        if (map.containsKey("queryText")){
+            queryText = map.get("queryText").toString();
+        }
+
         PageHelper.startPage(page,size);
-        return ordersDao.findAll();
+        return ordersDao.pageQuery(queryText);
     }
 
     @Override
@@ -38,6 +44,16 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public Orders queryById(String id) {
         return ordersDao.queryById(id);
+    }
+
+    @Override
+    public void delete(Integer orderId) {
+        ordersDao.delete(orderId);
+    }
+
+    @Override
+    public List<Orders> exportQuery(Map<String, Object> map) {
+        return ordersDao.exportQuery(map);
     }
 
 

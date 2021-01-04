@@ -4,6 +4,7 @@ import com.ben.rightMana.dao.UserDao;
 import com.ben.rightMana.domain.Role;
 import com.ben.rightMana.domain.UserInfo;
 import com.ben.rightMana.service.UserService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR Ben
@@ -42,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<SimpleGrantedAuthority> getAuthory(List<Role> roles) {
-        List<SimpleGrantedAuthority> list = new ArrayList<>();
+        List<SimpleGrantedAuthority> list = new ArrayList<SimpleGrantedAuthority>();
         for (Role role : roles) {
             list.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
         }
@@ -80,5 +82,33 @@ public class UserServiceImpl implements UserService {
         for (int i = 0;i < roleIds.length;i++){
             userDao.addRoleToUser(userId,roleIds[i]);
         }
+    }
+
+    @Override
+    public List<UserInfo> pageQuery(Map<String, Object> map) {
+        int pageno = (Integer) map.get("pageno");
+        int pagesize = (Integer) map.get("pagesize");
+        String queryText = null;
+        if (map.containsKey("queryText")){
+            queryText = map.get("queryText").toString();
+        }
+
+        PageHelper.startPage(pageno,pagesize);
+        return userDao.pageQuery(queryText);
+    }
+
+    @Override
+    public void openStatus(Map<String, Object> map) {
+        userDao.openStatus(map);
+    }
+
+    @Override
+    public void closeStatus(Map<String, Object> map) {
+        userDao.closeStatus(map);
+    }
+
+    @Override
+    public List<UserInfo> exportQuery(Map<String, Object> map) {
+        return userDao.exportQuery(map);
     }
 }

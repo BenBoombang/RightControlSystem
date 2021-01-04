@@ -5,6 +5,7 @@ import com.ben.rightMana.domain.UserInfo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR Ben
@@ -48,4 +49,12 @@ public interface UserDao {
 
     @Insert("insert into user_role(userId,roleId) values(#{userId},#{roleId})")
     void addRoleToUser(@Param("userId") Integer userId,@Param("roleId") Integer roleId);
+
+    List<UserInfo> pageQuery(@Param("queryText") String queryText);
+
+    void openStatus(Map<String, Object> map);
+
+    void closeStatus(Map<String, Object> map);
+
+    List<UserInfo> exportQuery(Map<String, Object> map);
 }

@@ -4,4 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ben.rightMana.dao.OrdersDao">
 
+    <resultMap id="ord" type="com.ben.rightMana.domain.Orders">
+        <id property="id" column="id"/>
+        <result property="orderNum" column="orderNum"/>
+        <result property="orderTime" column="orderTime"/>
+        <result property="peopleCount" column="peopleCount"/>
+        <result property="orderDesc" column="orderDesc"/>
+        <result property="payType" column="payType"/>
+        <result property="orderStatus" column="orderStatus"/>
+    </resultMap>
+
+    <select id="exportQuery" resultMap="ord">
+        select * from orders where 1=1
+        <if test="queryText != null">
+            and orderNum like concat('%',#{queryText},'%')
+        </if>
+    </select>
 </mapper>

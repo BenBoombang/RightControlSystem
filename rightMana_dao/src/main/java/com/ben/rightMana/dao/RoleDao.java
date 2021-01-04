@@ -34,4 +34,9 @@ public interface RoleDao {
 
     @Insert("insert into role_permission(roleId,permissionId) values(#{roleId},#{permissionId})")
     void addPermissionToRole(@Param("roleId") Integer roleId,@Param("permissionId") Integer permissionId);
+
+    List<Role> pageQuery(@Param("queryText") String queryText);
+
+    @Update("update role set roleName = #{roleName},roleDesc = #{roleDesc} where id = #{id}")
+    void updateRole(Role role);
 }

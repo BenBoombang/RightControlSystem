@@ -9,15 +9,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-
-
-
-<title>数据 - AdminLTE2定制版</title>
-<meta name="description" content="AdminLTE2定制版">
-<meta name="keywords" content="AdminLTE2定制版">
-
-
-
+<title>管理系统|商品展示页</title>
 
 <!-- Tell the browser to be responsive to screen width -->
 <meta
@@ -166,12 +158,12 @@
 			<!-- 内容头部 -->
 			<section class="content-header">
 				<h1>
-					数据管理 <small>数据列表</small>
+					产品管理 <small>产品列表</small>
 				</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
-					<li><a href="#">数据管理</a></li>
-					<li class="active">数据列表</li>
+					<li><a href="#">基础数据</a></li>
+					<li class="active">产品管理</li>
 				</ol>
 			</section>
 			<!-- 内容头部 /-->
@@ -182,7 +174,7 @@
 				<!-- .box-body -->
 				<div class="box box-primary">
 					<div class="box-header with-border">
-						<h3 class="box-title">列表</h3>
+						<h3 class="box-title">产品列表</h3>
 					</div>
 
 					<div class="box-body">
@@ -198,31 +190,40 @@
 											onclick="window.location.href='${pageContext.request.contextPath}/pages/product-add.jsp'">
 											<i class="fa fa-file-o"></i> 新建
 										</button>
-										<button type="button" class="btn btn-default" title="删除">
+										<button type="button" class="btn btn-default" onclick="deleteProducts()" title="删除">
 											<i class="fa fa-trash-o"></i> 删除
 										</button>
-										<button type="button" class="btn btn-default" title="开启">
+										<button type="button" class="btn btn-default" onclick="openStatus()" title="开启">
 											<i class="fa fa-check"></i> 开启
 										</button>
-										<button type="button" class="btn btn-default" title="屏蔽">
+										<button type="button" class="btn btn-default" onclick="closeStatus()" title="屏蔽">
 											<i class="fa fa-ban"></i> 屏蔽
 										</button>
-										<button type="button" class="btn btn-default" title="刷新">
+										<button type="button" class="btn btn-default" onclick="window.location.reload();" title="刷新">
 											<i class="fa fa-refresh"></i> 刷新
+										</button>
+										<button type="button" class="btn btn-default" onclick="productExportToExcel()" title="刷新">
+											<i class="fa fa-download"></i> 导出
 										</button>
 									</div>
 								</div>
 							</div>
-							<div class="box-tools pull-right">
-								<div class="has-feedback">
+							<div class="box-tools pull-right col-md-2">
+								<div class="has-feedback input-group">
+									<span class="input-group-btn">
+										<button class="btn btn-primary btn-sm" type="button" onclick="productPageQuery(1)">搜索</button>
+									</span>
 									<input type="text" class="form-control input-sm"
-										placeholder="搜索"> <span
-										class="glyphicon glyphicon-search form-control-feedback"></span>
+										placeholder="产品编号" name="queryText" id="queryText" />
 								</div>
 							</div>
 							<!--工具栏/-->
 
+							<%-- 隐藏域，用来存储 pageSize --%>
+							<input type="hidden" name="currentPageSize" id="currentPageSize">
+
 							<!--数据列表-->
+							<form id="productForm">
 							<table id="dataList"
 								class="table table-bordered table-striped table-hover dataTable">
 								<thead>
@@ -241,72 +242,13 @@
 										<th class="text-center">操作</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody id="productData">
 
-
-									<c:forEach items="${productList}" var="product">
-
-										<tr>
-											<td><input name="ids" type="checkbox"></td>
-											<td>${product.id }</td>
-											<td>${product.productNum }</td>
-											<td>${product.productName }</td>
-											<td>${product.cityName }</td>
-											<td>${product.departureTimeStr }</td>
-											<td class="text-center">${product.productPrice }</td>
-											<td>${product.productDesc }</td>
-											<td class="text-center">${product.productStatusStr }</td>
-											<td class="text-center">
-												<button type="button" class="btn bg-olive btn-xs">订单</button>
-												<button type="button" class="btn bg-olive btn-xs">详情</button>
-												<button type="button" class="btn bg-olive btn-xs">编辑</button>
-											</td>
-										</tr>
-									</c:forEach>
 								</tbody>
-								<!--
-                            <tfoot>
-                            <tr>
-                            <th>Rendering engine</th>
-                            <th>Browser</th>
-                            <th>Platform(s)</th>
-                            <th>Engine version</th>
-                            <th>CSS grade</th>
-                            </tr>
-                            </tfoot>-->
-							</table>
-							<!--数据列表/-->
 
-							<!--工具栏-->
-							<div class="pull-left">
-								<div class="form-group form-inline">
-									<div class="btn-group">
-										<button type="button" class="btn btn-default" title="新建">
-											<i class="fa fa-file-o"></i> 新建
-										</button>
-										<button type="button" class="btn btn-default" title="删除">
-											<i class="fa fa-trash-o"></i> 删除
-										</button>
-										<button type="button" class="btn btn-default" title="开启">
-											<i class="fa fa-check"></i> 开启
-										</button>
-										<button type="button" class="btn btn-default" title="屏蔽">
-											<i class="fa fa-ban"></i> 屏蔽
-										</button>
-										<button type="button" class="btn btn-default" title="刷新">
-											<i class="fa fa-refresh"></i> 刷新
-										</button>
-									</div>
-								</div>
-							</div>
-							<div class="box-tools pull-right">
-								<div class="has-feedback">
-									<input type="text" class="form-control input-sm"
-										placeholder="搜索"> <span
-										class="glyphicon glyphicon-search form-control-feedback"></span>
-								</div>
-							</div>
-							<!--工具栏/-->
+							</table>
+							</form>
+							<!--数据列表/-->
 
 						</div>
 						<!-- 数据表格 /-->
@@ -318,28 +260,14 @@
 					<!-- .box-footer-->
 					<div class="box-footer">
 						<div class="pull-left">
-							<div class="form-group form-inline">
-								总共2 页，共14 条数据。 每页 <select class="form-control">
-									<option>1</option>
-									<option>2</option>
-									<option>3</option>
-									<option>4</option>
-									<option>5</option>
-								</select> 条
+							<div class="form-group form-inline" id="footData" >
+				
 							</div>
 						</div>
 
 						<div class="box-tools pull-right">
 							<ul class="pagination">
-								<li><a href="#" aria-label="Previous">首页</a></li>
-								<li><a href="#">上一页</a></li>
-								<li><a href="#">1</a></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#">5</a></li>
-								<li><a href="#">下一页</a></li>
-								<li><a href="#" aria-label="Next">尾页</a></li>
+
 							</ul>
 						</div>
 
@@ -360,10 +288,10 @@
 		<!-- 底部导航 -->
 		<footer class="main-footer">
 			<div class="pull-right hidden-xs">
-				<b>Version</b> 1.0.8
+				<b>Version</b> 1.0.0
 			</div>
-			<strong>Copyright &copy; 2014-2017 <a
-				href="http://www.itcast.cn">研究院研发部</a>.
+			<strong>Copyright &copy; 2020-2021 <a
+				href="#">BenBoy</a>.
 			</strong> All rights reserved.
 		</footer>
 		<!-- 底部导航 /-->
@@ -458,15 +386,22 @@
 		src="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/plugins/layer/layer.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/plugins/jqPage/jqPaginator.js"></script>
 	<script>
 		$(document).ready(function() {
-			// 选择框
+			// // 选择框
 			$(".select2").select2();
 
 			// WYSIHTML5编辑器
 			$(".textarea").wysihtml5({
 				locale : 'zh-CN'
 			});
+
+			productPageQuery(1);
+
 		});
 
 		// 设置激活菜单
@@ -498,7 +433,285 @@
 				}
 				$(this).data("clicks", !clicks);
 			});
+
 		});
+
+		// 导出到Excel
+		function productExportToExcel() {
+			// 首先获取筛选框中的条件
+			var qryText = $("#queryText").val();
+			window.location.href="${pageContext.request.contextPath}/product/export?queryText=" + qryText;
+		}
+
+
+		// 批量屏蔽商品
+		function closeStatus() {
+			// 首先判断你有没有选中某行数据
+			var closeBoxs = $("input[name='ids']:checked");
+			if (closeBoxs.length == 0) {
+				layer.msg("请至少选择一条数据", {time:2000, icon:5, shift:6}, function () {
+					// 回调方法
+				});
+			}else {
+				layer.confirm("是否要屏蔽所选商品",  {icon: 3, title:'提示'}, function(cindex){
+					layer.close(cindex);
+
+					$.ajax({
+						type : "post",
+						url : "${pageContext.request.contextPath}/product/closes",
+						data : $("#productForm").serialize(),
+						success : function (result) {
+							if (result.succ) {
+
+								productPageQuery(1);
+							}else {
+								layer.msg("屏蔽商品失败", {time:2000, icon:5, shift:6}, function () {
+									// 回调方法
+								});
+							}
+						}
+					})
+
+				}, function(cindex){
+					layer.close(cindex);
+				});
+			}
+		}
+
+
+		// 批量开启商品
+		function openStatus() {
+			// 首先判断你有没有选中某行数据
+			var openBoxs = $("input[name='ids']:checked");
+			if (openBoxs.length == 0) {
+				layer.msg("请至少选择一条数据", {time:2000, icon:5, shift:6}, function () {
+					// 回调方法
+				});
+			}else {
+				layer.confirm("是否要开启所选商品",  {icon: 3, title:'提示'}, function(cindex){
+					layer.close(cindex);
+
+					$.ajax({
+						type : "post",
+						url : "${pageContext.request.contextPath}/product/opens",
+						data : $("#productForm").serialize(),
+						success : function (result) {
+							if (result.succ) {
+
+								productPageQuery(1);
+							}else {
+								layer.msg("开启商品失败", {time:2000, icon:5, shift:6}, function () {
+									// 回调方法
+								});
+							}
+						}
+					})
+
+				}, function(cindex){
+					layer.close(cindex);
+				});
+			}
+		}
+
+
+		// 批量删除商品
+		function deleteProducts() {
+			// 首先判断你有没有选中某行数据
+			var boxs =  $("input[name='ids']:checked");
+			if (boxs.length == 0) {
+				layer.msg("请至少选择一条数据", {time:2000, icon:5, shift:6}, function () {
+					// 回调方法
+				});
+			}else {
+				layer.confirm("是否要删除所选商品",  {icon: 3, title:'提示'}, function(cindex){
+					layer.close(cindex);
+
+					$.ajax({
+						type : "post",
+						url : "${pageContext.request.contextPath}/product/deletes",
+						data : $("#productForm").serialize(),
+						success : function (result) {
+							if (result.succ) {
+
+								productPageQuery(1);
+							}else {
+								layer.msg("删除商品失败", {time:2000, icon:5, shift:6}, function () {
+									// 回调方法
+								});
+							}
+						}
+					})
+
+				}, function(cindex){
+					layer.close(cindex);
+				});
+			}
+		}
+
+
+		// 修改商品函数
+		function editProduct(productId) {
+			window.location.href = "${pageContext.request.contextPath}/product/edit?productId=" + productId;
+		}
+
+		
+		// 删除商品函数
+		function deleteProduct(productId,productName) {
+
+			layer.confirm("是否要删除商品【" + productName + "】",  {icon: 3, title:'提示'}, function(cindex){
+				layer.close(cindex);
+
+				$.ajax({
+					type : "post",
+					url : "${pageContext.request.contextPath}/product/delete",
+					data : {
+						"productId" : productId
+					},
+					success : function (result) {
+						if (result.succ) {
+
+							productPageQuery(1);
+						}else {
+							layer.msg("删除商品失败", {time:2000, icon:5, shift:6}, function () {
+								// 回调方法
+							});
+						}
+					}
+				})
+
+			}, function(cindex){
+				layer.close(cindex);
+			});
+
+
+		}
+		
+
+		// 创建异步分页查询语句
+		function productPageQuery(pageno) {
+
+			var productLoading = null;
+
+			// 首先尝试从 隐藏域 pageSize 中获取值
+			var pagesize = $("#currentPageSize").val();
+			if (pagesize == "") {
+				pagesize = 3;
+			}
+
+			// 创建初始筛选条件
+			var ajaxData = {
+				"pageno" : pageno,
+				"pagesize" : pagesize
+			};
+
+			// 尝试从筛选条件框中获取数据
+			var text= $("#queryText").val();
+			if (text != ""){
+				ajaxData.queryText = text;
+			}
+
+
+			// 构建ajax请求
+			$.ajax({
+				type : "post",
+				url : "${pageContext.request.contextPath}/product/pageQuery",
+				dataType : "json",
+				data : JSON.stringify(ajaxData),
+				contentType : "application/json;charset=utf-8",
+				beforeSend : function () {
+					productLoading = layer.msg("数据加载中",{icon:16});
+				},
+				success : function (result) {
+					layer.close(productLoading);
+
+					if (result.succ){
+
+						var dataContent = "";
+
+						var footContent = "";
+
+						var pageInfo = result.data;
+						var productList = pageInfo.list;
+
+
+						$.each(productList,function (i, product) {
+							dataContent += '<tr>';
+							dataContent += '<td><input class="itemBox" name="ids" type="checkbox" value="' + product.id +'"></td>';
+							dataContent += '<td>' + product.id + '</td>';
+							dataContent += '<td>' + product.productNum + '</td>';
+							dataContent += '<td>' + product.productName + '</td>';
+							dataContent += '<td>' + product.cityName + '</td>';
+							dataContent += '<td>' + product.departureTimeStr + '</td>';
+							dataContent += '<td class="text-center">' + product.productPrice + '</td>';
+							dataContent += '<td>' + product.productDesc + '</td>';
+							dataContent += '<td class="text-center">' + product.productStatusStr + '</td>';
+							dataContent += '<td class="text-center">';
+							dataContent += '	<button type="button" class="btn bg-olive btn-xs" onclick="editProduct('+ product.id +')">编辑</button>';
+							dataContent += '	<button type="button" class="btn bg-olive btn-xs" onclick="deleteProduct('+ product.id +',\''+product.productName +'\')">删除</button>';
+							dataContent += '</td>';
+							dataContent += '</tr>';
+						});
+
+
+						$("#productData").html(dataContent);
+
+						// 给 pageSize 隐藏域赋值
+						$("#currentPageSize").val(pagesize);
+
+						footContent += '总共 <strong> ' +pageInfo.pages + ' </strong> 页，共 <strong> ' + pageInfo.total + ' </strong> 条数据。每页 <select class="form-control" id="selectPageSize" onchange="productChangePageSize()">';
+						footContent += '<option value="1">1</option>';
+						footContent += '<option value="2">2</option>';
+						footContent += '<option value="3">3</option>';
+						footContent += '<option value="4">4</option>';
+						footContent += '<option value="5">5</option>';
+						footContent += '</select> 条';
+
+						// 构建左下角内容
+						$("#footData").html(footContent);
+
+						$("#selectPageSize option[value='"+ pageInfo.pageSize +"']").attr("selected", true);
+
+						$.jqPaginator('.pagination', {
+							// totalPages: 100, //设置分页的总页数
+							totalCounts: pageInfo.total, //设置分页的总条目数
+							pageSize: pageInfo.pageSize,
+							visiblePages: 5, //设置最多显示的页码数（例如有100也，当前第1页，则显示1 - 7页）
+							currentPage: pageInfo.pageNum,//当前页
+							first: '<li class="first"><a href="javascript:;">首页</a></li>',
+							prev: '<li class="prev"><a href="javascript:;"><i class="arrow arrow2"></i>上一页</a></li>',
+							next: '<li class="next"><a href="javascript:;">下一页<i class="arrow arrow3"></i></a></li>',
+							last: '<li class="last"><a href="javascript:;">末页</a></li>',
+							page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+							onPageChange: function (num, type) {
+								//页面变化回调函数
+								if (type == "change") {
+									productPageQuery(num);//当前页码
+								}
+							}
+						});
+
+					}else {
+						layer.msg("数据加载失败", {time:2000, icon:5, shift:6}, function () {
+							// 回调方法
+						});
+					}
+				}
+			})
+		}
+
+
+		function productChangePageSize() {
+			//获取下拉框的值
+			var pageSize = $("#selectPageSize").val();
+
+			// 将这个放到隐藏域中
+			$("#currentPageSize").val(pageSize);
+
+			// 然后立刻进行一次分页查询
+			productPageQuery(1);
+
+		}
+
 	</script>
 </body>
 
