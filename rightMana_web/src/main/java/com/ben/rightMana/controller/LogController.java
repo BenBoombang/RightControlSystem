@@ -32,6 +32,13 @@ public class LogController {
     }
 
 
+    /**
+     * 日志的分页查询
+     * @param pageno
+     * @param pagesize
+     * @param queryText
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/pageQuery")
     public Object pageQuery(@RequestParam(name = "pageno") Integer pageno,@RequestParam(name = "pagesize") Integer pagesize,@RequestParam(name = "queryText",required = false) String queryText){
