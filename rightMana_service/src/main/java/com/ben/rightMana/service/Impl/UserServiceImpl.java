@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private HttpServletRequest request;
+
     // 引入密码加密类
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -39,7 +44,8 @@ public class UserServiceImpl implements UserService {
 
         // 创建一个 spring-security 提供的 User 对象
         User user = new User(userInfo.getUsername(),userInfo.getPassword(),userInfo.getStatus() == 1 ,true,true,true ,getAuthory(userInfo.getRoles()));
-
+        HttpSession session = request.getSession();
+        session.setAttribute("username",user.getUsername());
         return user;
     }
 
