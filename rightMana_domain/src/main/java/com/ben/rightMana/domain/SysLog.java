@@ -2,6 +2,7 @@ package com.ben.rightMana.domain;
 
 import lombok.Data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -19,4 +20,9 @@ public class SysLog {
     private String url;
     private Long executionTime;
     private String method;
+
+    public String getVisitTimeStr() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(visitTime);
+    }
 }

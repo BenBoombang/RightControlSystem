@@ -1,0 +1,12 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ben.rightMana.dao.LogDao">
+
+    <select id="pageQuery" resultType="com.ben.rightMana.domain.SysLog">
+        select * from syslog where 1=1
+        <if test="queryText != null">
+            and method like concat('%',#{queryText},'%')
+        </if>
+    </select>
+</mapper>
