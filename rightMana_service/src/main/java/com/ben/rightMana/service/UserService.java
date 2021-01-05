@@ -29,4 +29,8 @@ public interface UserService extends UserDetailsService {
     void closeStatus(Map<String, Object> map);
 
     List<UserInfo> exportQuery(Map<String, Object> map);
+
+    void updateUser(UserInfo userInfo);
+
+    void updatePwd(Integer userId, String password);
 }

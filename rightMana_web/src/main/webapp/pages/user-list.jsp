@@ -379,6 +379,11 @@
         }
     }
 
+    // 修改用户
+    function editUser(id) {
+        window.location.href="${pageContext.request.contextPath}/user/editUser?userId=" + id;
+    }
+
     function queryDetailById(id) {
         window.location.href="${pageContext.request.contextPath}/user/queryDetailById?userId=" + id;
     }
@@ -450,6 +455,7 @@
                         userContent += '<td class="text-center">';
                         userContent += '    <a href="#" class="btn bg-olive btn-xs" onclick="queryDetailById('+ user.id +')" >角色详情</a>';
                         userContent += '    <a href="#" class="btn bg-olive btn-xs" onclick="queryUserByIdAndAllRole('+ user.id +')">添加角色</a>';
+                        userContent += '    <a href="#" class="btn bg-olive btn-xs" onclick="editUser('+ user.id +')">编辑</a>';
                         userContent += '</td>';
                         userContent += '</tr>';
                     });

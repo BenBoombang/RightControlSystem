@@ -57,4 +57,9 @@ public interface UserDao {
     void closeStatus(Map<String, Object> map);
 
     List<UserInfo> exportQuery(Map<String, Object> map);
+
+    void updateUser(UserInfo userInfo);
+
+    @Update("update users set `password` = #{password} where id = #{userId}")
+    void updatePwd(@Param("userId") Integer userId,@Param("password") String password);
 }

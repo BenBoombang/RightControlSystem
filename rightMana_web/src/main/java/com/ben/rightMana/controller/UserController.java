@@ -10,6 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    // 引入密码加密类
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @RequestMapping("/queryAll")
     public String queryAll(){
@@ -220,5 +225,30 @@ public class UserController {
             e.printStackTrace();
         }
 
+    }
+
+    @RequestMapping("/editUser")
+    public ModelAndView editUser(@RequestParam(name = "userId") Integer userId){
+        ModelAndView mv = new ModelAndView();
+        UserInfo userInfo = userService.queryDetailById(userId);
+        mv.addObject("user",userInfo);
+        mv.setViewName("user-edit");
+
+        return mv;
+    }
+
+    @RequestMapping("/update")
+    public String update(UserInfo userInfo){
+        userService.updateUser(userInfo);
+
+        return "redirect:queryAll";
+    }
+
+
+    @RequestMapping("/updatePwd")
+    public String updatePwd(Integer userId,String password){
+        userService.updatePwd(userId,password);
+
+        return "redirect:queryAll";
     }
 }

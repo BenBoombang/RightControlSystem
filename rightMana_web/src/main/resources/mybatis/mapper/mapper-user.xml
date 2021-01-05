@@ -33,4 +33,14 @@
             and username like concat('%',#{queryText},'%')
         </if>
     </select>
+
+    <update id="updateUser">
+        update users set email = #{email},
+        `username` = #{username},
+        `password` = #{password},
+         phoneNum = #{phoneNum},
+         status = #{status}
+         where id = #{id}
+    </update>
+
 </mapper>

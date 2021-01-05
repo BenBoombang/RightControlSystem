@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
         User user = new User(userInfo.getUsername(),userInfo.getPassword(),userInfo.getStatus() == 1 ,true,true,true ,getAuthory(userInfo.getRoles()));
         HttpSession session = request.getSession();
         session.setAttribute("username",user.getUsername());
+        session.setAttribute("userId",userInfo.getId());
         return user;
     }
 
@@ -116,5 +117,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserInfo> exportQuery(Map<String, Object> map) {
         return userDao.exportQuery(map);
+    }
+
+    @Override
+    public void updateUser(UserInfo userInfo) {
+        userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
+        userDao.updateUser(userInfo);
+    }
+
+    @Override
+    public void updatePwd(Integer userId, String password) {
+        password = passwordEncoder.encode(password);
+        userDao.updatePwd(userId,password);
     }
 }
