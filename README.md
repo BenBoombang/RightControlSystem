@@ -4,7 +4,7 @@
 #### 开发工具
 idea 2018.3
 
-数据库 MySQL
+数据库 MySQL 5.7
 
 项目类型 Maven
 
